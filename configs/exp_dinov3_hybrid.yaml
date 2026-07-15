@@ -1,0 +1,24 @@
+exp_name: A3_dinov3_hybrid
+mode: hybrid
+
+data_root: data/yolo_format
+data_config: configs/tianchi.yaml
+output_dir: outputs/runs
+
+nc: 15
+img_size: 640
+batch_size: 8
+epochs: 100
+lr: 0.0001
+weight_decay: 0.0001
+patience: 20
+num_workers: 4
+seed: 42
+
+dinov3_size: vits
+patch_size: 16
+dinov3_path: third_party/dinov3
+finetune_backbone: false
+use_lora: false
+lora_r: 8
+yolo_width: 1.0

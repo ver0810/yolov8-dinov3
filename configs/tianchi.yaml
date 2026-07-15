@@ -1,0 +1,22 @@
+path: data/yolo_format
+train: images/train
+val: images/val
+test: images/test
+
+nc: 15
+names:
+  - 破洞
+  - 水渍
+  - 油污
+  - 色斑
+  - 纬缩
+  - 经缩
+  - 松经
+  - 紧经
+  - 吊经
+  - 粗经
+  - 粗纬
+  - 浆斑
+  - 整经结
+  - 星跳
+  - 跳花

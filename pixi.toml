@@ -1,0 +1,65 @@
+[project]
+name = "yolo-dino"
+version = "0.1.0"
+description = "YOLOv8 + DINOv3 backbone fusion for industrial textile defect detection"
+authors = ["Researcher <research@local>"]
+channels = ["conda-forge"]
+platforms = ["osx-arm64"]
+
+[system-requirements]
+macos = "13.0"
+
+[dependencies]
+python = "3.11.*"
+pip = ">=24.0"
+git = ">=2.39"
+
+[pypi-dependencies]
+# Core deep-learning stack
+# Note: pip's torch wheel for osx-arm64 already includes MPS
+torch = ">=2.5.0,<2.6.0"
+torchvision = ">=0.20.0,<0.21.0"
+numpy = ">=1.26,<2.1"
+
+# Detection framework
+ultralytics = ">=8.3.0,<9.0.0"
+
+# DINOv3 backbone deps
+einops = ">=0.8.0"
+safetensors = ">=0.4.5"
+huggingface-hub = ">=0.25.0"
+timm = ">=1.0.9"
+
+# Data & augmentation
+opencv-python-headless = ">=4.10.0"
+pillow = ">=10.4.0"
+albumentations = ">=1.4.10,<2.0.0"
+
+# Visualization & analysis
+pandas = ">=2.2.0"
+matplotlib = ">=3.9.0"
+seaborn = ">=0.13.0"
+scikit-learn = ">=1.5.0"
+tensorboard = ">=2.17.0"
+pyyaml = ">=6.0.0"
+
+# Utilities
+tqdm = ">=4.66.0"
+rich = ">=13.0.0"
+
+# Dev / lint
+ruff = ">=0.6.0"
+ipykernel = ">=6.29.0"
+jupyter = ">=1.1.0"
+
+[feature.cuda.dependencies]  # Linux/Windows optional, unused on osx-arm64
+
+[environments]
+default = { solve-group = "default" }
+dev = { features = [], solve-group = "default" }
+
+[tasks]
+# Setup helper
+setup-dinov3 = "bash scripts/setup_dinov3.sh"
+# Quick sanity check
+sanity = "python scripts/sanity_check.py"

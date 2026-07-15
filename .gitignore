@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Pixi
+.pixi/
+pixi.lock
+
+# Virtual envs
+venv/
+.env
+
+# Data & models
+data/raw/
+data/yolo_format/
+third_party/dinov3/
+third_party/dinov3_weights/
+models/pretrained/
+*.pt
+*.onnx
+*.engine
+*.torchscript
+*.tflite
+
+# Outputs
+outputs/runs/
+outputs/predict/
+outputs/exp_*/
+*.log
+wandb/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
