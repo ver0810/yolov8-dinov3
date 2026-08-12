@@ -1,0 +1,16 @@
+exp_name: "v2_034_yolo11s_1280_oversample"
+mode: yolo_family
+# Best-known recipe (old 034) rebuilt on the v2 stratified split:
+# 1280 + weak-class x3 oversampling (bd/heidian/wy/bmss), COCO init directly
+# (skips the separate 018@1280 step; 100ep, lr 0.001 as in old 034).
+yolo_model: yolo11s.pt
+
+data_config: configs/own_dataset_v2_oversampled.yaml
+output_dir: outputs/runs
+
+img_size: 1280
+batch_size: 4
+epochs: 100
+lr: 0.001
+lrf: 0.1
+patience: 30

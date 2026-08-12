@@ -1,0 +1,15 @@
+exp_name: "021_yolo11s_freeze"
+mode: yolo_family
+yolo_model: yolo11s.pt
+
+data_config: configs/own_dataset.yaml
+output_dir: outputs/runs
+
+img_size: 1280
+batch_size: 4
+epochs: 200
+lr: 0.001
+lrf: 0.1
+patience: 50
+cos_lr: true
+freeze: 10

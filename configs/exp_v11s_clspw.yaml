@@ -1,0 +1,16 @@
+exp_name: "029_yolo11s_clspw"
+mode: yolo_family
+yolo_model: yolo11s.pt
+
+data_config: configs/own_dataset.yaml
+output_dir: outputs/runs
+
+# 004 基线 + cls_pw=1.0 (类别逆频率加权)
+# 019 曾在 1280 下试过 cls_pw，结果被 1280 负变量污染；
+# 本实验在 640 下干净重试，隔离 cls_pw 的独立贡献
+img_size: 640
+batch_size: 16
+epochs: 100
+lr: 0.01
+patience: 100
+cls_pw: 1.0

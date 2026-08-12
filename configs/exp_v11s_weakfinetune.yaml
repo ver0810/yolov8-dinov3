@@ -1,0 +1,17 @@
+exp_name: "032_yolo11s_weakfinetune"
+mode: yolo_family
+# 004 全量训练权重初始化（两阶段难例重训）
+yolo_model: outputs/runs/004_yolo11s/weights/best.pt
+
+data_config: configs/own_dataset_weak.yaml
+output_dir: outputs/runs
+
+# 004 两阶段微调：只用含 bd/heidian/wy 的图重训
+# 先运行 scripts/prepare_weak_subset.py 生成子集 txt
+# 低 lr + 短 epochs，防止过拟合到弱类子集
+img_size: 640
+batch_size: 16
+epochs: 50
+lr: 0.0005
+lrf: 0.1
+patience: 30

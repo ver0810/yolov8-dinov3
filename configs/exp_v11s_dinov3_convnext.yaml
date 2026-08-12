@@ -1,0 +1,15 @@
+exp_name: "038_yolo11s_dinov3_convnext"
+mode: yolo_family
+# Route 1: convnext_tiny.dinov3 full backbone (TRUE 4-stage pyramid, frozen encoder)
+# + 018-pretrained PAN head init (structural loader: scripts/load_pretrained_head.py)
+yolo_model: third_party/ultralytics/ultralytics/cfg/models/v8/yolov8-dinov3-convnext.yaml
+pretrained: outputs/pretrained_init/convnext_init.pt
+
+data_config: configs/own_dataset_weak.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 8
+epochs: 50
+lr: 0.001
+patience: 100

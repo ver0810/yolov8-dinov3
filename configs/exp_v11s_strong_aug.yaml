@@ -1,0 +1,20 @@
+exp_name: "020_yolo11s_strong_aug"
+mode: yolo_family
+yolo_model: yolo11s.pt
+
+data_config: configs/own_dataset.yaml
+output_dir: outputs/runs
+
+img_size: 1280
+batch_size: 4
+epochs: 200
+lr: 0.01
+lrf: 0.01
+patience: 50
+cos_lr: true
+mixup: 0.15
+cutmix: 0.15
+use_randaugment: true
+mosaic: 1.0
+degrees: 5.0
+close_mosaic: 20

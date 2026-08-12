@@ -1,0 +1,14 @@
+exp_name: "022_yolo11m_1280"
+mode: yolo_family
+yolo_model: yolo11m.pt
+
+data_config: configs/own_dataset.yaml
+output_dir: outputs/runs
+
+img_size: 1280
+batch_size: 2
+epochs: 200
+lr: 0.01
+lrf: 0.01
+patience: 50
+cos_lr: true

@@ -1,0 +1,16 @@
+exp_name: "031_yolo11s_copypaste"
+mode: yolo_family
+yolo_model: yolo11s.pt
+
+data_config: configs/own_dataset_copypaste.yaml
+output_dir: outputs/runs
+
+# 004 基线 + 弱类检测级 copy-paste 增强
+# 先运行 scripts/augment_copy_paste.py 生成增强数据集
+# (bd/heidian/wy 实例从原图抠出、随机贴到其他图，扩充上下文多样性)
+# 数据: /home/ancheng/dataset/dataset_split_copypaste/
+img_size: 640
+batch_size: 16
+epochs: 100
+lr: 0.01
+patience: 100

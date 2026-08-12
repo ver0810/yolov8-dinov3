@@ -1,0 +1,18 @@
+exp_name: "v2_004ms_yolo11s_640"
+mode: yolo_family
+# Multi-scale training (last unexplored training-side lever, 030 never finished).
+# Random scale 0.5-1.5x per batch (320-960px) for scale robustness of small targets.
+# Same recipe as v2_004 otherwise: COCO init, 640, 100ep.
+yolo_model: yolo11s.pt
+
+data_config: configs/own_dataset_v2.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 16
+epochs: 100
+lr: 0.01
+lrf: 0.01
+patience: 100
+cos_lr: true
+multi_scale: 0.5

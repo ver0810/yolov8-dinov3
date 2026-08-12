@@ -1,0 +1,23 @@
+path: /home/ancheng/dataset/dataset_split
+train: /home/ancheng/Code/yolov8-dinov3/outputs/weak_subset/weak_train.txt
+val: val/images
+test: test/images
+nc: 17
+names:
+- lj
+- bd
+- heidian
+- wy
+- zyc
+- zmty
+- cq
+- zj
+- bj
+- jt
+- yy
+- bmss
+- zy
+- pd
+- HD
+- cy
+- jiaodai

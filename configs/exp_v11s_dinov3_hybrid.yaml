@@ -1,0 +1,15 @@
+exp_name: "040_yolo11s_dinov3_hybrid"
+mode: yolo_family
+# Route 2: hybrid — YOLO11s layers 0-4 (P3 detail, trainable) + convnext_t
+# DINOv3 deep (P4/P5 TRUE pyramid, frozen). + 018-pretrained yolo_early+head init
+yolo_model: third_party/ultralytics/ultralytics/cfg/models/v8/yolov8-dinov3-hybrid.yaml
+pretrained: outputs/pretrained_init/hybrid_init.pt
+
+data_config: configs/own_dataset_weak.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 8
+epochs: 50
+lr: 0.001
+patience: 100

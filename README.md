@@ -1,79 +1,61 @@
-# YOLO-DINO: YOLOv8 + DINOv3 Backbone Fusion for Textile Defect Detection
+# YOLO-DINO: YOLOv8 + DINOv3 for Textile Defect Detection
 
-Industrial textile defect detection via backbone fusion of YOLOv8 and DINOv3 (Meta's self-supervised ViT foundation model).
+Industrial textile defect detection by extending a **local Ultralytics fork** with DINOv3 backbone modules.
 
-## Research Question
+## Layout
 
-Can replacing or augmenting YOLOv8's CSPDarknet backbone with DINOv3's pretrained ViT improve small-defect detection on industrial fabric imagery?
+```
+yolov8-dinov3/
+├── third_party/ultralytics/     # local fork — model changes live here
+│   └── ultralytics/
+│       ├── nn/modules/dinov3.py # DINOv3Backbone (stub + TODOs)
+│       └── cfg/models/v8/
+│           ├── yolov8-dinov3.yaml
+│           └── yolov8-dinov3-hybrid.yaml
+├── configs/                     # data + experiment hypers
+├── scripts/                     # train / val / predict / prepare / sanity
+├── data/                        # datasets (gitignored)
+└── outputs/                     # runs (gitignored)
+```
 
-## Architecture
+## Variants
 
-| Variant | Backbone | Neck | Head |
-|---------|----------|------|------|
-| A0 Baseline | CSPDarknet (YOLOv8) | PAN-FPN | Detect |
-| A1 Full | DINOv3 ViT-S/B (frozen) | FusionNeck | Detect |
-| A2 Full+LoRA | DINOv3 ViT-S/B (LoRA) | FusionNeck | Detect |
-| A3 Hybrid | CSP(P1-P3) + DINOv3(P4-P5) | HybridFusionNeck | Detect |
+| Mode | Model | Notes |
+|------|--------|--------|
+| `baseline` | `yolov8n.pt` | Official YOLOv8 |
+| `full` | `yolov8-dinov3.yaml` | DINOv3 backbone + PAN head (encoder still **stub**) |
+| `hybrid` | `yolov8-dinov3-hybrid.yaml` | Placeholder = YOLOv8; TODOs for CSP+DINO |
+
+DINOv3 backbone: local Meta repo + optional `.pth` (see below).
+
+## Setup
+
+```bash
+uv sync
+uv run bash scripts/setup_dinov3.sh   # clone third_party/dinov3
+# download weights → third_party/dinov3_weights/*.pth  (or DINOV3_WEIGHTS=/path/to.pth)
+uv run python scripts/sanity_check.py
+```
+
+## Train / val / predict
+
+```bash
+# data
+uv run python scripts/prepare_data.py --raw-dir data/raw/tianchi
+
+# baseline
+uv run python scripts/train.py --mode baseline --config configs/exp_baseline.yaml
+
+# DINOv3 full (stub backbone until wired)
+uv run python scripts/train.py --mode full --config configs/exp_dinov3_full.yaml
+
+# validate
+uv run python scripts/val.py --weights outputs/runs/A0_baseline_yolov8/weights/best.pt
+
+# predict
+uv run python scripts/predict.py --weights path/to/best.pt --source path/to/images
+```
 
 ## Dataset
 
-[Tianchi Fabric Defect Detection](https://tianchi.aliyun.com/dataset/147338) — 15 defect categories, ~7000+ images.
-
-Defect classes: 破洞, 水渍, 油污, 色斑, 纬缩, 经缩, 松经, 紧经, 吊经, 粗经, 粗纬, 浆斑, 整经结, 星跳, 跳花
-
-## Quick Start
-
-```bash
-# 1. Install deps
-pixi install
-
-# 2. Setup DINOv3 (clone repo)
-pixi run setup-dinov3
-
-# 3. Sanity check
-pixi run sanity
-
-# 4. Prepare dataset (after downloading raw data)
-pixi run python scripts/prepare_data.py --raw-dir data/raw/tianchi
-
-# 5. Train baseline
-pixi run python scripts/train.py --mode baseline
-
-# 6. Train DINOv3 full replacement
-pixi run python scripts/train.py --mode full --dinov3-size vits
-
-# 7. Train hybrid backbone
-pixi run python scripts/train.py --mode hybrid --dinov3-size vits
-
-# 8. Evaluate
-pixi run python scripts/eval.py --mode full --weights outputs/runs/A1_dinov3_full_frozen/best.pt
-
-# 9. Predict
-pixi run python scripts/predict.py --mode full --weights outputs/runs/A1_dinov3_full_frozen/best.pt --input data/raw/test_images
-```
-
-## Project Structure
-
-```
-yolo-dino/
-├── pixi.toml              # Dependency management
-├── pyproject.toml
-├── configs/               # Experiment & data configs
-├── data/                  # Dataset (gitignored)
-├── models/pretrained/     # Checkpoints (gitignored)
-├── src/yolo_dino/
-│   ├── models/
-│   │   ├── backbones/     # DINOv3 wrapper
-│   │   ├── necks/         # FusionNeck, HybridFusionNeck
-│   │   └── yolo_dinov3.py # YOLODINOv3, YOLODINOv3Hybrid
-│   ├── data/              # Tianchi dataset loader & converter
-│   └── utils/             # Metrics, helpers
-├── scripts/               # Train, eval, predict, setup
-├── notebooks/             # Analysis & visualization
-└── outputs/               # Training runs (gitignored)
-```
-
-## Environment
-
-- Python 3.11, PyTorch 2.5+ (MPS), Ultralytics 8.3+
-- Hardware: Apple Silicon (MPS) / CUDA
+[Tianchi Fabric Defect Detection](https://tianchi.aliyun.com/dataset/147338) — see `configs/tianchi.yaml`.

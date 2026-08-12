@@ -1,0 +1,12 @@
+exp_name: "004_yolo11s"
+mode: yolo_family
+yolo_model: yolo11s.pt
+
+data_config: configs/own_dataset.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 16
+epochs: 100
+lr: 0.01
+patience: 100

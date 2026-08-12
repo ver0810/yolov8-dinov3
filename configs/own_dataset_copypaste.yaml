@@ -1,0 +1,23 @@
+path: /home/ancheng/dataset/dataset_split_copypaste
+train: train/images
+val: val/images
+test: test/images
+nc: 17
+names:
+- lj
+- bd
+- heidian
+- wy
+- zyc
+- zmty
+- cq
+- zj
+- bj
+- jt
+- yy
+- bmss
+- zy
+- pd
+- HD
+- cy
+- jiaodai

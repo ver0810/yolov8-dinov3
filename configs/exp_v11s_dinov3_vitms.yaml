@@ -1,0 +1,15 @@
+exp_name: "039_yolo11s_dinov3_vitms"
+mode: yolo_family
+# Route 3: vit_small_patch16_dinov3 multi-depth backbone (freeze=False → full fine-tune)
+# + 018-pretrained PAN head init
+yolo_model: third_party/ultralytics/ultralytics/cfg/models/v8/yolov8-dinov3-vitms.yaml
+pretrained: outputs/pretrained_init/vitms_init.pt
+
+data_config: configs/own_dataset_weak.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 4
+epochs: 50
+lr: 0.001
+patience: 100

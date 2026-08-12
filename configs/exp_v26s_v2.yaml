@@ -1,0 +1,15 @@
+exp_name: "052_yolo26s_v2"
+mode: yolo_family
+# yolo26s on the v2 stratified split — only architecture that beat 004 (0.8226
+# old split; NMS-free one-to-one head). Same recipe as 044: COCO init, 640,
+# batch16, 100ep. Target: confirm the NMS-free gain under the clean v2 val.
+yolo_model: yolo26s.pt
+
+data_config: configs/own_dataset_v2.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 16
+epochs: 100
+lr: 0.01
+patience: 100

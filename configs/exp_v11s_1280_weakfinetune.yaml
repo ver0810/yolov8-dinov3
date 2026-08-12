@@ -1,0 +1,18 @@
+exp_name: "033_yolo11s_1280_weakfinetune"
+mode: yolo_family
+# 018 (yolo11s@1280) 权重初始化 —— 弱类子集 1280 微调
+# 032 教训: 004@640 基座太弱 (bd 0.30), 微调后仅 0.32
+# 换 1280 基座 + 1280 分辨率，期望弱类继承分辨率红利
+yolo_model: outputs/runs/018_yolo11s_1280/weights/best.pt
+
+data_config: configs/own_dataset_weak.yaml
+output_dir: outputs/runs
+
+# 只含 bd/heidian/wy 的 265 张图 (bmss 顺带 66 实例)
+# 1280 与基座训练分辨率一致; batch4 为 6G 卡上限
+img_size: 1280
+batch_size: 4
+epochs: 100
+lr: 0.0005
+lrf: 0.1
+patience: 30

@@ -1,0 +1,12 @@
+exp_name: "002_yolov8s"
+mode: yolo_family
+yolo_model: yolov8s.pt
+
+data_config: configs/own_dataset.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 16
+epochs: 100
+lr: 0.01
+patience: 100

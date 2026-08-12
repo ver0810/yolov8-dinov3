@@ -1,0 +1,16 @@
+exp_name: "019_yolo11s_cls_weight"
+mode: yolo_family
+yolo_model: yolo11s.pt
+
+data_config: configs/own_dataset.yaml
+output_dir: outputs/runs
+
+img_size: 1280
+batch_size: 4
+epochs: 200
+lr: 0.01
+lrf: 0.01
+patience: 50
+cos_lr: true
+cls: 1.5
+cls_pw: 1.0

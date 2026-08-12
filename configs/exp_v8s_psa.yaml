@@ -1,0 +1,12 @@
+exp_name: "013_yolov8s_psa"
+mode: yolo_family
+yolo_model: third_party/ultralytics/ultralytics/cfg/models/v8/yolov8s_psa.yaml
+
+data_config: configs/own_dataset.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 16
+epochs: 100
+lr: 0.01
+patience: 100

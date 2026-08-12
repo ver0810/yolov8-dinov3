@@ -1,0 +1,16 @@
+exp_name: "030_yolo11s_multiscale"
+mode: yolo_family
+yolo_model: yolo11s.pt
+
+data_config: configs/own_dataset.yaml
+output_dir: outputs/runs
+
+# 004 基线 + multi_scale=0.5 (训练时随机缩放 480~800)
+# 与 018-022 的"固定 1280"不同：随机尺度抖动模拟不同观测距离，
+# 对尺度敏感的线状缺陷有针对性，且不动推理分辨率
+img_size: 640
+batch_size: 16
+epochs: 100
+lr: 0.01
+patience: 100
+multi_scale: 0.5

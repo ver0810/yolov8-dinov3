@@ -1,0 +1,15 @@
+exp_name: "041_yolo11s_dinov3_convnext_100ep"
+mode: yolo_family
+# Route 1 warm-start continuation: 038 best.pt (50ep) → 100 more epochs
+# Total effective ~150ep, aligning training budget with 004 baseline (100ep).
+yolo_model: third_party/ultralytics/ultralytics/cfg/models/v8/yolov8-dinov3-convnext.yaml
+pretrained: outputs/runs/038_yolo11s_dinov3_convnext/weights/best.pt
+
+data_config: configs/own_dataset_weak.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 8
+epochs: 100
+lr: 0.001
+patience: 100

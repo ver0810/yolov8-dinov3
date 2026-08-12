@@ -1,0 +1,17 @@
+exp_name: "v2_034c_yolo11s_1280_oversample"
+mode: yolo_family
+# FIXED warm-start (v2_034b was a no-op: pretrained field only applies when
+# yolo_model is a .yaml; with yolo_model=yolo11s.pt the init was silently skipped,
+# reproducing v2-034 exactly). Correct old-034 pattern: yolo_model IS the .pt
+# checkpoint, so YOLO() loads its weights directly.
+yolo_model: outputs/runs/v2_034_yolo11s_1280_oversample/weights/best.pt
+
+data_config: configs/own_dataset_v2_oversampled.yaml
+output_dir: outputs/runs
+
+img_size: 1280
+batch_size: 4
+epochs: 100
+lr: 0.001
+lrf: 0.1
+patience: 30

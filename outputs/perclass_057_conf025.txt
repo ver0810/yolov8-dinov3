@@ -1,0 +1,25 @@
+Ultralytics 8.4.104 🚀 Python-3.11.15 torch-2.5.1+cu124 CUDA:0 (NVIDIA GeForce RTX 3060 Laptop GPU, 6144MiB)
+YOLO26s summary (fused): 122 layers, 9,471,759 parameters, 0 gradients, 20.6 GFLOPs
+[34m[1mval: [0mFast image access ✅ (ping: 0.0±0.0 ms, read: 1409.3±136.4 MB/s, size: 7036.7 KB)
+[K[34m[1mval: [0mScanning /home/ancheng/Code/yolov8-dinov3/outputs/dataset_v2/val/labels.cache... 350 images, 0 backgrounds, 0 corrupt: 100% ━━━━━━━━━━━━ 350/350 86.4Mit/s 0.0s
+[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 4% ╸─────────── 1/22 5.9s/it 1.8s<2:03[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 9% ━─────────── 2/22 1.6it/s 2.0s<12.2s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 13% ━╸────────── 3/22 2.8it/s 2.1s<6.9s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 18% ━━────────── 4/22 3.8it/s 2.3s<4.7s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 22% ━━╸───────── 5/22 4.5it/s 2.5s<3.8s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 27% ━━━───────── 6/22 4.7it/s 2.7s<3.4s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 31% ━━━╸──────── 7/22 4.8it/s 2.9s<3.1s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 36% ━━━━──────── 8/22 4.7it/s 3.1s<3.0s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 40% ━━━━╸─────── 9/22 3.7it/s 3.9s<3.5s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 45% ━━━━━─────── 10/22 4.3it/s 4.1s<2.8s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 50% ━━━━━━────── 11/22 4.7it/s 4.3s<2.4s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 54% ━━━━━━╸───── 12/22 5.1it/s 4.4s<2.0s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 59% ━━━━━━━───── 13/22 5.5it/s 4.6s<1.6s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 63% ━━━━━━━╸──── 14/22 5.4it/s 4.8s<1.5s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 68% ━━━━━━━━──── 15/22 5.2it/s 5.0s<1.3s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 72% ━━━━━━━━╸─── 16/22 5.3it/s 5.2s<1.1s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 77% ━━━━━━━━━─── 17/22 4.0it/s 6.3s<1.3s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 81% ━━━━━━━━━╸── 18/22 4.7it/s 6.4s<0.8s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 86% ━━━━━━━━━━── 19/22 5.2it/s 6.6s<0.6s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 90% ━━━━━━━━━━╸─ 20/22 5.4it/s 6.7s<0.4s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 95% ━━━━━━━━━━━─ 21/22 5.7it/s 6.9s<0.2s[K                 Class     Images  Instances      Box(P          R      mAP50  mAP50-95): 100% ━━━━━━━━━━━━ 22/22 3.1it/s 7.1s
+                   all        350        678      0.562      0.548      0.533      0.358
+Speed: 1.0ms preprocess, 7.0ms inference, 0.0ms loss, 0.4ms postprocess per image
+class      n_gt  R@0.25  P@0.25  R@0.50  P@0.50  Rpeak
+lj           27  0.2593  0.3519  0.1481  0.5927  0.889
+bd           65  0.1537  0.4345  0.0302  1.0000  0.508
+heidian      41  0.1996  0.5767  0.0000  1.0000  0.659
+wy           68  0.3235  0.3731  0.2125  0.6160  0.735
+zyc          29  0.7241  0.8795  0.5896  0.9447  0.966
+zmty         57  0.2456  0.3289  0.0526  0.2541  0.684
+cq           23  0.4747  0.7318  0.3618  0.8059  0.826
+zj           26  0.5936  0.7940  0.5112  0.8691  0.846
+bj           42  0.7129  0.7891  0.6056  0.8357  0.905
+jt           21  0.8095  0.8447  0.7666  0.9415  0.952
+yy            4  0.2500  0.6478  0.0000  1.0000  0.750
+bmss        127  0.3228  0.5352  0.1654  0.6058  0.724
+zy           48  0.5625  0.5029  0.4792  0.6285  0.917
+pd           31  0.7097  0.7351  0.6774  0.8124  0.935
+HD           28  0.3214  0.3975  0.2570  0.5450  0.643
+cy           24  0.5385  0.5894  0.4583  0.7757  0.958
+jiaodai      17  1.0000  0.9512  1.0000  0.9764  1.000

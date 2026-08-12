@@ -1,0 +1,14 @@
+exp_name: "053_yolo26s_hp_ep200"
+mode: yolo_family
+# HP sweep A — epoch length only. Baseline 006_yolo26s used 100ep (0.8226 old-val).
+# Ask: does yolo26s keep improving past 100ep (unlike yolo11s which plateaued)?
+yolo_model: yolo26s.pt
+
+data_config: configs/own_dataset.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 16
+epochs: 200
+lr: 0.01
+patience: 100

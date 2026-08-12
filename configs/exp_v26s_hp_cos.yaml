@@ -1,0 +1,15 @@
+exp_name: "054_yolo26s_hp_cos"
+mode: yolo_family
+# HP sweep: cosine schedule only (baseline cos_lr=False, lrf=0.01 abrupt)
+# Ask: does cosine annealing recover the low-confidence tail better?
+yolo_model: yolo26s.pt
+
+data_config: configs/own_dataset.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 16
+epochs: 100
+lr: 0.01
+patience: 100
+cos_lr: true

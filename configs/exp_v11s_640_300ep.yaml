@@ -1,0 +1,16 @@
+exp_name: "024_yolo11s_640_300ep"
+mode: yolo_family
+yolo_model: yolo11s.pt
+
+data_config: configs/own_dataset.yaml
+output_dir: outputs/runs
+
+# Identical to 004_yolo11s except epochs: 100 -> 300.
+# 004's linear LR schedule decays to ~1e-5 by ep100 (effectively dead),
+# so the longer schedule keeps an effective LR for more epochs.
+# Single-variable control vs 004: schedule length only.
+img_size: 640
+batch_size: 16
+epochs: 300
+lr: 0.01
+patience: 100

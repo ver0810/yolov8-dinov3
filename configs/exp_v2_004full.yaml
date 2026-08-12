@@ -1,0 +1,18 @@
+exp_name: "v2_004full_yolo11s_640"
+mode: yolo_family
+# Data-augmentation experiment: add the v2 TEST split (180 imgs, real GT) into
+# training. 1277 -> 1457 imgs (+14%), @640, COCO init, same recipe as v2_004.
+# Tests whether the held-out test split was wasted training signal under the
+# new stratified split (test has full GT labels).
+yolo_model: yolo11s.pt
+
+data_config: configs/own_dataset_v2_full.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 16
+epochs: 100
+lr: 0.01
+lrf: 0.01
+patience: 100
+cos_lr: true

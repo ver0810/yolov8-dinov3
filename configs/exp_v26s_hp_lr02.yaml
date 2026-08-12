@@ -1,0 +1,14 @@
+exp_name: "055_yolo26s_hp_lr02"
+mode: yolo_family
+# HP sweep: lr 0.01 -> 0.02 (yolo26 original paper trains with lr up to 0.02)
+# Ask: baseline lr0=0.01 was conservative; does the larger model family need higher lr?
+yolo_model: yolo26s.pt
+
+data_config: configs/own_dataset.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 16
+epochs: 100
+lr: 0.02
+patience: 100

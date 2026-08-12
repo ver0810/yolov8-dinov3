@@ -1,0 +1,19 @@
+exp_name: "057_yolo26s_v2_cos"
+mode: yolo_family
+# v2 split cos_lr validation. 054 showed cos +0.5% on the old split (0.8280 vs
+# 0.8226) — single run, within unmeasured seed noise. This run answers whether
+# cos_lr transfers to the clean v2 split by comparing against:
+#   052 yolo26s v2 no-cos = 0.8009
+#   044 yolo11s v2 (new baseline) = 0.8056
+# Interpretation rule (pre-committed): |Δ vs 044| < 1% => "no significant effect".
+yolo_model: yolo26s.pt
+
+data_config: configs/own_dataset_v2.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 16
+epochs: 100
+lr: 0.01
+patience: 100
+cos_lr: true

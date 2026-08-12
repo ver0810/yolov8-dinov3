@@ -1,0 +1,16 @@
+exp_name: "v2_004_yolo11s_640"
+mode: yolo_family
+# New stratified-split baseline: yolo11s @640, COCO init, 100ep.
+# Equivalent of old 004 on the v2 split (val 350 = stable scoring).
+yolo_model: yolo11s.pt
+
+data_config: configs/own_dataset_v2.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 16
+epochs: 100
+lr: 0.01
+lrf: 0.01
+patience: 100
+cos_lr: true

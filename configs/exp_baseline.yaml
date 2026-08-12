@@ -1,18 +1,12 @@
 exp_name: A0_baseline_yolov8
 mode: baseline
+yolo_model: yolov8n.pt
 
-data_root: data/yolo_format
 data_config: configs/tianchi.yaml
 output_dir: outputs/runs
 
-nc: 15
 img_size: 640
 batch_size: 8
 epochs: 100
-lr: 0.001
-weight_decay: 0.0005
-patience: 20
-num_workers: 4
-seed: 42
-
-yolo_model: yolov8n.pt
+lr: 0.01
+patience: 50

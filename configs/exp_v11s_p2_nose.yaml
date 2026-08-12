@@ -1,0 +1,15 @@
+exp_name: "023_yolo11s_p2_nose"
+mode: yolo_family
+yolo_model: third_party/ultralytics/ultralytics/cfg/models/11/yolo11s-p2-nose.yaml
+pretrained: yolo11s.pt
+
+data_config: configs/own_dataset.yaml
+output_dir: outputs/runs
+
+img_size: 1280
+batch_size: 4
+epochs: 200
+lr: 0.01
+lrf: 0.01
+patience: 50
+cos_lr: true

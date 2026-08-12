@@ -1,0 +1,15 @@
+exp_name: "050_yolo10s"
+mode: yolo_family
+# yolov10s replication of 004 (yolo11s @640, COCO init, 100ep, same data and
+# hyperparameters) — backbone swap only, 8.1M params vs yolo11s 9.4M.
+# Direct comparison with 004 (0.8197) under the original split.
+yolo_model: yolov10s.pt
+
+data_config: configs/own_dataset.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 16
+epochs: 100
+lr: 0.01
+patience: 100

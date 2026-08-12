@@ -12,9 +12,9 @@ __pycache__/
 .coverage
 htmlcov/
 
-# Pixi
-.pixi/
-pixi.lock
+# Virtual env
+.venv/
+uv.lock
 
 # Virtual envs
 venv/
@@ -25,6 +25,9 @@ data/raw/
 data/yolo_format/
 third_party/dinov3/
 third_party/dinov3_weights/
+# keep third_party/ultralytics (local fork) tracked if desired; ignore its caches:
+third_party/ultralytics/**/__pycache__/
+third_party/ultralytics/.venv/
 models/pretrained/
 *.pt
 *.onnx
@@ -33,14 +36,37 @@ models/pretrained/
 *.tflite
 
 # Outputs
-outputs/runs/
-outputs/predict/
-outputs/exp_*/
+# Outputs: track experiment essentials only, ignore bulk artifacts
+outputs/*
+!outputs/runs/
+!outputs/*.csv
+!outputs/*.txt
+outputs/runs/*
+!outputs/runs/*/
+outputs/runs/*/*
+!outputs/runs/*/results.csv
+!outputs/runs/*/args.yaml
+!outputs/runs/*/results.png
+!outputs/runs/*/confusion_matrix.png
+!outputs/runs/*/labels.jpg
+!outputs/runs/*/F1_curve.png
+!outputs/runs/*/PR_curve.png
+/runs/
 *.log
 wandb/
+heatmap_*.jpg
 
 # IDE
 .vscode/
 .idea/
 *.swp
 .DS_Store
+
+# Third-party nested git repo (own .git) — don't track as-is
+third_party/ultralytics/
+# Compiled presentation PDFs
+presentations/**/slides.pdf
+# Generated docs images
+docs/image.bmp
+# Extra weights (non-.pt formats)
+weights/

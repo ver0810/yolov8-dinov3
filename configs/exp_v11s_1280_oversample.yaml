@@ -1,0 +1,20 @@
+exp_name: "034_yolo11s_1280_oversample"
+mode: yolo_family
+# 018 (yolo11s@1280) 权重初始化 —— 全量 + 弱类过采样重训
+# 033 教训: 纯弱类子集 (265 张) 过拟合 + 灾难性遗忘 (bd -0.09, bmss -0.07)
+# 方案 A: 全量 1445 + 弱类图 (bd/heidian/wy/bmss) x3 → 2337 张
+# 期望: 弱类曝光 3 倍, 强类全保留, 不遗忘
+yolo_model: outputs/runs/018_yolo11s_1280/weights/best.pt
+
+data_config: configs/own_dataset_oversampled.yaml
+output_dir: outputs/runs
+
+# 1280 与基座训练分辨率一致; batch4 为 6G 卡上限
+img_size: 1280
+batch_size: 4
+# 2337 张 / 100 epochs 过拟合风险低 (033 是 265 张才出问题)
+# lr 略高于 033 (0.0005) 以在全量数据上真正学弱类
+epochs: 100
+lr: 0.001
+lrf: 0.1
+patience: 30

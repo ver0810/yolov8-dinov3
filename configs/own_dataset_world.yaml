@@ -1,0 +1,24 @@
+path: /home/ancheng/dataset/dataset_split
+train: train/images
+val: val/images
+test: test/images
+
+nc: 17
+names:
+  - trash
+  - white_dot
+  - black_dot
+  - stain_mark
+  - paper_anomaly
+  - dirty_stripe
+  - air_channel
+  - paper_splice
+  - fabric_splice
+  - joint
+  - press_mark
+  - surface_damage
+  - wrinkle_mark
+  - hole
+  - horizontal_band
+  - ghost_image
+  - adhesive_tape

@@ -1,0 +1,18 @@
+exp_name: "v2_034b_yolo11s_1280_oversample"
+mode: yolo_family
+# Old-034 replication fix: old 034 had 018@1280 (200ep) initialization + 31ep.
+# v2-034 went COCO -> 1280 for only 100ep (resolution adaptation shortfall, mAP50 0.448 vs 0.508).
+# This warm-starts from v2-034 best.pt for another 100ep -> ~200ep total @1280,
+# matching the old budget (231ep) and letting the oversampling actually take effect.
+yolo_model: yolo11s.pt
+pretrained: outputs/runs/v2_034_yolo11s_1280_oversample/weights/best.pt
+
+data_config: configs/own_dataset_v2_oversampled.yaml
+output_dir: outputs/runs
+
+img_size: 1280
+batch_size: 4
+epochs: 100
+lr: 0.001
+lrf: 0.1
+patience: 30

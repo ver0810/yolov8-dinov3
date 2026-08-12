@@ -1,0 +1,15 @@
+exp_name: "056_yolo26s_hp_ep200cos"
+mode: yolo_family
+# HP sweep: combined epochs=200 + cos_lr (the two most plausible positive dims)
+# Baseline 006: 100ep/no-cos = 0.8226. Ask: do longer training + cosine compound?
+yolo_model: yolo26s.pt
+
+data_config: configs/own_dataset.yaml
+output_dir: outputs/runs
+
+img_size: 640
+batch_size: 16
+epochs: 200
+lr: 0.01
+patience: 100
+cos_lr: true
