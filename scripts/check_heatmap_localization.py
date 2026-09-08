@@ -60,7 +60,7 @@ def centroid_of_topk(hm, k=0.3):
 
 
 if __name__ == "__main__":
-    from visualize_dinov3_heatmaps import (build_vit, vit_attn_heatmap, conv_heatmap, load_img)
+    from visualize_dinov3_heatmaps import build_vit, conv_heatmap, load_img, vit_attn_heatmap
 
     vit, captured = build_vit()
     import timm

@@ -136,8 +136,8 @@ def gather_predictions(models, sample, imgsz, tta_scales, tta_flip, nms_iou=None
 
 def nms_merge(boxes, confs, clss, iou_thr):
     """Class-aware NMS merge. Returns (boxes, confs, clss) with duplicates removed."""
-    from torchvision.ops import nms
     import torch
+    from torchvision.ops import nms
 
     keep_all = []
     for c in np.unique(clss):

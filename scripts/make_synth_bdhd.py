@@ -10,10 +10,9 @@ against kept boxes; boxes outside window dropped like the instance-center pool).
 Output: outputs/dataset_v1_patch_bdhd_synth/{images,labels} + pool_synth.txt
 """
 import random
-import sys
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageEnhance, ImageOps
+from PIL import Image, ImageEnhance
 
 ROOT = Path("/home/ancheng/Code/yolov8-dinov3")
 SRC = Path("/home/ancheng/dataset/dataset_split/train")

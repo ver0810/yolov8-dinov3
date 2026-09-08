@@ -24,7 +24,7 @@ def run(cmd, desc):
     if result.returncode != 0:
         print(f"  FAILED with code {result.returncode}")
         sys.exit(1)
-    print(f"  DONE")
+    print("  DONE")
 
 
 def main():

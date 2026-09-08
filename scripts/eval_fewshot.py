@@ -38,7 +38,6 @@ import csv
 import random
 import shutil
 import sys
-import tempfile
 from collections import defaultdict
 from pathlib import Path
 
@@ -209,7 +208,7 @@ def main():
     original_data = args.data
 
     print(f"{'='*70}")
-    print(f"  Few-Shot Evaluation Protocol")
+    print("  Few-Shot Evaluation Protocol")
     print(f"{'='*70}")
     print(f"  Pretrained weights: {args.weights}")
     print(f"  K-shots: {args.k_shots}")
@@ -228,7 +227,7 @@ def main():
         print(f"    class {cls_id:2d}: {len(class_map[cls_id]):4d} images")
 
     # Check which classes have enough samples for each K
-    print(f"\n  Feasibility check:")
+    print("\n  Feasibility check:")
     for k in args.k_shots:
         short = [cid for cid, paths in class_map.items() if len(paths) < k]
         if short:
@@ -237,7 +236,7 @@ def main():
             print(f"    K={k}: all classes have >= {k} images")
 
     # Run few-shot experiments
-    print(f"\n[2/4] Running few-shot experiments...")
+    print("\n[2/4] Running few-shot experiments...")
 
     # Results storage: results[k][seed] = per_class_max_recall array
     results = {}
@@ -283,7 +282,7 @@ def main():
             per_class_r = np.zeros(nc) if 'nc' in dir() else None  # fallback
             try:
                 if args.skip_train:
-                    print(f"    [SKIP-TRAIN] Using pretrained weights directly")
+                    print("    [SKIP-TRAIN] Using pretrained weights directly")
                     best_pt = args.weights
                 else:
                     # Train
@@ -304,7 +303,7 @@ def main():
                     print(f"    Training done: {best_pt}")
 
                 # Evaluate
-                print(f"    Evaluating on full val set...")
+                print("    Evaluating on full val set...")
                 per_class_r, names, nt = evaluate_recall(
                     weights=str(best_pt),
                     data_yaml=original_data,
@@ -324,10 +323,10 @@ def main():
                 macro_r = per_class_r[nt > 0].mean() if (nt > 0).any() else 0.0
                 print(f"    Macro recall (conf→0): {macro_r:.4f}")
             else:
-                print(f"    Skipping aggregation — run failed")
+                print("    Skipping aggregation — run failed")
 
     # Aggregate results
-    print(f"\n[3/4] Aggregating results...")
+    print("\n[3/4] Aggregating results...")
 
     if all_names is None or all_nt is None:
         print("  [FAIL] No successful evaluation runs — cannot aggregate.")
@@ -364,7 +363,7 @@ def main():
         sys.exit(1)
     avg_recall = np.nanmean([k_stats[k]["macro_recall_mean"] for k in args.k_shots])
     print(f"\n{'='*70}")
-    print(f"  FEW-SHOT RESULTS (macro recall @ conf→0)")
+    print("  FEW-SHOT RESULTS (macro recall @ conf→0)")
     print(f"{'='*70}")
     print(f"  {'K-shot':>8s} {'mean_R':>8s} {'std_R':>8s}")
     print(f"  {'-'*28}")
@@ -392,7 +391,7 @@ def main():
         print(row)
 
     # Generate plots
-    print(f"\n[4/4] Generating plots and saving reports...")
+    print("\n[4/4] Generating plots and saving reports...")
     try:
         import matplotlib
         matplotlib.use("Agg")
@@ -491,7 +490,7 @@ def main():
         f.write(f"Epochs: {args.epochs}, freeze={args.freeze}, lr={args.lr}\n")
         f.write(f"imgsz: {args.imgsz}, batch: {args.batch}\n\n")
 
-        f.write(f"SCORING ITEM (3): Few-shot average recall\n")
+        f.write("SCORING ITEM (3): Few-shot average recall\n")
         f.write(f"{'-'*40}\n")
         for k in args.k_shots:
             s = k_stats[k]

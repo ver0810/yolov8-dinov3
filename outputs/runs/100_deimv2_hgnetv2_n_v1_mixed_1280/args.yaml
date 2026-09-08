@@ -1,0 +1,75 @@
+# V1 mixed pool (b-final-v3, 2838 train) — DEIMv2 HGNetv2-N 1280 vs RT-DETR
+__include__: [
+  '../dataset/custom_detection.yml',
+  '../runtime.yml',
+  '../base/dataloader.yml',
+  '../base/optimizer.yml',
+  '../base/deimv2.yml'
+]
+
+output_dir: ./outputs/v1_mixed_1280
+
+eval_spatial_size: [1280, 1280]
+
+num_classes: 17
+
+train_dataloader:
+  dataset:
+    img_folder: /
+    ann_file: /home/ancheng/Code/yolov8-dinov3/outputs/deim_smoke/coco/train_mixed.json
+    transforms:
+      policy:
+        epoch: 100
+  total_batch_size: 4
+  num_workers: 4
+  collate_fn:
+    mixup_prob: 0.0
+    copyblend_prob: 0.0
+    base_size: 1280
+    base_size_repeat: 4
+
+val_dataloader:
+  dataset:
+    img_folder: /home/ancheng/dataset/dataset_split/val/images
+    ann_file: /home/ancheng/Code/yolov8-dinov3/outputs/deim_smoke/coco/val.json
+    transforms:
+      ops:
+        - {type: Resize, size: [1280, 1280], }
+        - {type: ConvertPILImage, dtype: 'float32', scale: True}
+  total_batch_size: 8
+  num_workers: 4
+
+HGNetv2:
+  name: 'B0'
+  return_idx: [2, 3]
+  freeze_at: -1
+  freeze_norm: False
+  use_lab: True
+
+HybridEncoder:
+  in_channels: [512, 1024]
+  feat_strides: [16, 32]
+  hidden_dim: 128
+  use_encoder_idx: [1]
+  dim_feedforward: 512
+  expansion: 0.34
+  depth_mult: 0.5
+  version: 'dfine'
+
+DEIMTransformer:
+  feat_channels: [128, 128]
+  feat_strides: [16, 32]
+  hidden_dim: 128
+  num_levels: 2
+  num_points: [6, 6]
+  num_layers: 3
+  eval_idx: -1
+  dim_feedforward: 512
+
+epoches: 20
+optimizer:
+  lr: 0.00025
+
+DEIMCriterion:
+  matcher:
+    change_matcher: False

@@ -1,8 +1,8 @@
+import random
+from pathlib import Path
+
 import cv2
 import numpy as np
-from pathlib import Path
-import random
-from collections import defaultdict
 from ultralytics import YOLO
 
 MODEL_PATH = "outputs/runs/004_yolo11s/weights/best.pt"

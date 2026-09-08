@@ -17,8 +17,6 @@ Usage:
 """
 import argparse
 import random
-import shutil
-import sys
 from pathlib import Path
 
 from PIL import Image

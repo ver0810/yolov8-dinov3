@@ -38,14 +38,15 @@ from __future__ import annotations
 
 import argparse
 import json
+
+# Ensure local ultralytics fork is importable
+import sys
 import time
 from pathlib import Path
 
 import numpy as np
 import torch
 
-# Ensure local ultralytics fork is importable
-import sys
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "third_party" / "ultralytics"))
 
@@ -386,7 +387,7 @@ def main():
     mean_r, mean_p = compute_macro_recall_precision(px, p_curve, r_curve, ap_class_index, nc, nt_per_class)
 
     # ============ OFFICIAL METRIC (self-val, conf=0.25) ============
-    print(f"\n  OFFICIAL METRIC (self-val + conf=0.25):")
+    print("\n  OFFICIAL METRIC (self-val + conf=0.25):")
     idx25 = int(np.argmin(np.abs(px - 0.25)))
     R25, P25 = float(mean_r[idx25]), float(mean_p[idx25])
     F25 = 2 * R25 * P25 / (R25 + P25 + 1e-9) if R25 + P25 > 0 else 0.0
@@ -453,8 +454,8 @@ def main():
     print(f"\n{'='*70}")
     print(f"  SCORING ITEM 2: Over-detection / FP rate <= {args.target_fp_rate:.0%}")
     print(f"{'='*70}")
-    print(f"  [NOTE] No clean (defect-free) images in dataset → cannot measure FP on clean images.")
-    print(f"  [NOTE] Reporting FP among all predictions on val set (proxy metric).")
+    print("  [NOTE] No clean (defect-free) images in dataset → cannot measure FP on clean images.")
+    print("  [NOTE] Reporting FP among all predictions on val set (proxy metric).")
 
     # Official FP proxy at conf=0.25 (self-val operating point)
     idx = int(np.argmin(np.abs(px - 0.25)))
@@ -473,7 +474,7 @@ def main():
         total_fp += fp_c
     total_pred = total_tp + total_fp
     fp_rate = total_fp / total_pred if total_pred > 0 else 0
-    print(f"  At conf=0.25 (official operating point):")
+    print("  At conf=0.25 (official operating point):")
     print(f"    Estimated TP={total_tp:.0f}, FP={total_fp:.0f}, total_pred={total_pred:.0f}")
     print(f"    FP rate (FP/total_pred) = {fp_rate:.4f} ({fp_rate:.1%})")
     if fp_rate <= args.target_fp_rate:
@@ -483,7 +484,7 @@ def main():
 
     # --- Scoring Item 4: FPS benchmark ---
     print(f"\n{'='*70}")
-    print(f"  SCORING ITEM 4: Inference Speed >= 30 fps @1024x1024")
+    print("  SCORING ITEM 4: Inference Speed >= 30 fps @1024x1024")
     print(f"{'='*70}")
 
     imgsz_list = [640, 1024, 1280]
@@ -496,10 +497,10 @@ def main():
         fps_3080_est = r["fps"] * 2.5
         flag = "OK" if fps_3080_est >= 30 else "SLOW"
         print(f"  {sz:6d} {r['mean_ms']:8.1f} {r['p50_ms']:8.1f} {r['p95_ms']:8.1f} {r['fps']:7.1f} {fps_3080_est:7.1f} {flag}")
-    print(f"  * Estimated RTX 3080 FPS = measured FPS × 2.5 (TFLOPS ratio)")
+    print("  * Estimated RTX 3080 FPS = measured FPS × 2.5 (TFLOPS ratio)")
 
     # --- Generate plots ---
-    print(f"\n[3/4] Generating plots...")
+    print("\n[3/4] Generating plots...")
     generate_plots(px, p_curve, r_curve, names, ap_class_index, nt_per_class,
                    mean_r, mean_p, args.target_recall, out_dir)
 
@@ -525,7 +526,7 @@ def main():
     # Text summary
     txt_path = out_dir / "scoring_report.txt"
     with open(txt_path, "w") as f:
-        f.write(f"Scoring Evaluation Report\n")
+        f.write("Scoring Evaluation Report\n")
         f.write(f"{'='*70}\n")
         f.write(f"Model: {run_name}\n")
         f.write(f"Weights: {weights_path}\n")
@@ -538,27 +539,27 @@ def main():
         f.write(f"{'-'*40}\n")
         if conf_at_target is not None:
             f.write(f"  Macro: conf={conf_at_target:.4f} → R={recall_at_target:.4f}, P={prec_at_target:.4f}\n")
-            f.write(f"  Status: PASS (at macro level)\n")
+            f.write("  Status: PASS (at macro level)\n")
         else:
             f.write(f"  Macro max recall: {float(mean_r.max()):.4f}\n")
             f.write(f"  Status: FAIL (gap = {args.target_recall - float(mean_r.max()):.4f})\n")
-        f.write(f"\n")
+        f.write("\n")
 
         f.write(f"SCORING ITEM 2: FP rate <= {args.target_fp_rate:.0%}\n")
         f.write(f"{'-'*40}\n")
-        f.write(f"  No clean images available for direct measurement.\n")
+        f.write("  No clean images available for direct measurement.\n")
         if conf_at_target is not None:
             f.write(f"  Proxy FP rate at R>={args.target_recall:.0%} working point: {fp_rate:.1%}\n")
-        f.write(f"\n")
+        f.write("\n")
 
-        f.write(f"SCORING ITEM 4: Speed >= 30 fps @1024x1024 @RTX3080\n")
+        f.write("SCORING ITEM 4: Speed >= 30 fps @1024x1024 @RTX3080\n")
         f.write(f"{'-'*40}\n")
         for sz, r in fps_results.items():
             fps_3080 = r["fps"] * 2.5
             f.write(f"  {sz}x{sz}: {r['fps']:.1f} fps (measured), ~{fps_3080:.1f} fps (est. @3080)\n")
-        f.write(f"\n")
+        f.write("\n")
 
-        f.write(f"PER-CLASS DETAIL (sorted by max_recall ascending)\n")
+        f.write("PER-CLASS DETAIL (sorted by max_recall ascending)\n")
         f.write(f"{'-'*70}\n")
         f.write(f"{'Class':>12s} {'n_GT':>5s} {'max_R':>6s} {'conf@R95':>9s} {'P@R95':>6s} {'best_F1':>7s}\n")
         for r in rows:

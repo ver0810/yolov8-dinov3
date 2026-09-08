@@ -7,7 +7,6 @@ on the box (clamped into image bounds). Every label FULLY inside a window is
 kept (bd/heidian always complete; other classes kept when coincidentally whole).
 Writes images/*.jpg, labels/*.txt, visuals/*.png (annotated) + pool_bdhd.txt.
 """
-import sys
 from collections import defaultdict
 from pathlib import Path
 

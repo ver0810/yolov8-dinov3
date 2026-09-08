@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import argparse
 import glob
-import os
 import random
 import re
 import shutil
@@ -149,7 +148,7 @@ def main():
         dist = ", ".join(f"{NAMES[i]}:{cc[i]}" for i in range(17) if cc[i])
         print(f"  {split:5} instances: {sum(cc.values())} | {dist}")
     print(f"new data root: {OUT}")
-    print(f"config: configs/own_dataset_v2.yaml")
+    print("config: configs/own_dataset_v2.yaml")
 
 
 if __name__ == "__main__":
