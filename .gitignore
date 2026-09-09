@@ -51,6 +51,10 @@ outputs/runs/*/*
 !outputs/runs/*/labels.jpg
 !outputs/runs/*/F1_curve.png
 !outputs/runs/*/PR_curve.png
+!outputs/runs/*/NOTES.md
+!outputs/runs/*/val_coco_metrics.json
+!outputs/runs/*/log.txt
+!outputs/runs/*/log_train.txt
 /runs/
 *.log
 wandb/

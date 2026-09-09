@@ -1,0 +1,15 @@
+{
+ "AP_5095": 0.411,
+ "AP_50": 0.594,
+ "AP_75": 0.447,
+ "AP_small": 0.135,
+ "AP_medium": 0.285,
+ "AP_large": 0.476,
+ "AR_5095_all_100": 0.649,
+ "AR_50_all": 0.871,
+ "AR_75_all": 0.679,
+ "AR_small": 0.342,
+ "AR_medium": 0.495,
+ "AR_large": 0.701,
+ "note": "DEIMv2 native COCO eval, best_stg2 (EMA), v1 val 181 imgs, local RTX3060 re-run 2026-09-09"
+}
