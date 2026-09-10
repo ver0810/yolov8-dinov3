@@ -1,0 +1,15 @@
+{
+ "AP_5095": 0.5,
+ "AP_50": 0.708,
+ "AP_75": 0.534,
+ "AP_small": 0.151,
+ "AP_medium": 0.328,
+ "AP_large": 0.563,
+ "AR_5095_all_100": 0.685,
+ "AR_50_all": 0.924,
+ "AR_75_all": 0.722,
+ "AR_small": 0.32,
+ "AR_medium": 0.573,
+ "AR_large": 0.751,
+ "note": "DEIMv2 native COCO eval, best_stg2 (EMA ep66), v1 val 181 imgs, local 3060 re-run 2026-09-10"
+}
