@@ -38,7 +38,7 @@ train_dataloader:
         - {type: ConvertBoxes, fmt: 'cxcywh', normalize: True}
       policy:
         epoch: [4, 64, 120]
-  total_batch_size: 16
+  total_batch_size: 8
   num_workers: 8
   collate_fn:
     mixup_prob: 0.5
@@ -58,7 +58,7 @@ val_dataloader:
         - {type: Resize, size: [1280, 1280], }
         - {type: ConvertPILImage, dtype: 'float32', scale: True}
         - {type: Normalize, mean: [0.485, 0.456, 0.406], std: [0.229, 0.224, 0.225]}
-  total_batch_size: 16
+  total_batch_size: 8
   num_workers: 4
 
 DINOv3STAs:
@@ -73,7 +73,7 @@ DINOv3STAs:
 epoches: 132
 print_freq: 10
 checkpoint_freq: 4
-grad_accum: 2
-warmup_iter: 2000
+grad_accum: 4
+warmup_iter: 1000
 
 # keep official grouped lr (deimv2_dinov3_l_coco.yml already defines: base 5e-4, dinov3 1.25e-5)
