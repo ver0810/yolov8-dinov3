@@ -160,15 +160,144 @@
   ]
   #align(center)[#text(size: 9pt)[漏检（bd/hei 7-20px）与误检——小目标仍是主短板]]
 ]
+// ============================================================
+// 9 DEIMv2 架构（官方论文）
+// ============================================================
+#slide[
+  == DEIMv2：Real-Time Detection Meets DINOv3
 
+  #align(center)[#image("assets/deimv2_sta_arch.png", width: 92%)]
+  #align(center)[#text(size: 8pt, fill: gray)[图源：DEIMv2 官方论文 arXiv:2509.20787（Spatial Tuning Adapter 架构图）]]
+
+  #grid(columns: (1.15fr, 0.85fr), gutter: 1em)[
+    #text(size: 9pt)[
+      *架构路线*（S/M/L/X 档）：DINOv3 自监督预训练 ViT → *STA（Spatial Tuning Adapter）* → 混合编码器 → 简化解码器 → Dense O2O 训练
+
+      #v(0.3em)
+      *STA 解决什么*：DINOv3 只有*单尺度*输出（ViT 16×16 patch）→ STA 用轻量卷积把 1/8、1/16、1/32 三个尺度的细粒度细节"注入"各层，无需改动预训练 backbone
+    ]
+    #rect(stroke: rgb("#55A868") + 1.2pt, radius: 4pt, inset: 6pt)[
+      #text(size: 9pt)[
+        *论文三个创新*：
+        + *STA 空间调谐适配器*：单尺度→多尺度，语义+细节互补
+        + *高效解码器*：4 层×300 query，cross-attn 简化
+        + *升级版 Dense O2O*：Mosaic+MixUp+CopyBlend 密集监督
+      ]
+    ]
+  ]
+]
+
+// ============================================================
+// 10 DEIMv2 Model Zoo 与选型
+// ============================================================
+#slide[
+  == DEIMv2 Model Zoo 与本工作选型
+
+  #table(
+    columns: (auto, auto, auto, auto, auto),
+    align: (left, right, right, right, right),
+    inset: 4pt,
+    [*档位*], [*COCO AP*], [*参数*], [*backbone*], [*适合*],
+    [N], [43.0], [3.6M], [HGNetv2], [轻量],
+    [S], [50.9], [9.7M], [DINOv3], [速度友好],
+    [M], [53.0], [18.1M], [DINOv3], [均衡],
+    [*L*], [*56.0*], [*32.2M*], [*DINOv3*], [*本文选择*],
+    [X], [57.8], [50.3M], [DINOv3], [精度极限],
+  )
+
+  #grid(columns: (1.2fr, 0.8fr), gutter: 1em)[
+    #text(size: 9pt)[
+      *为什么选 DINOv3-L*：
+      - 织物缺陷是*弱纹理细粒度判别*（wy 污印 ↔ zmty 脏印）——自监督 DINOv3 表征的强项
+      - 与 RT-DETR-L 同为 32M 参数档，公平对比
+      - 从 COCO 预训练权重 *-t 微调*（分类头重映射 80→17 类）
+    ]
+    #align(center)[#image("assets/deimv2_coco_AP_vs_GFLOPs.png", width: 100%)]
+  ]
+]
+
+// ============================================================
+// 11 我们的微调配置（教训修正）
+// ============================================================
+#slide[
+  == 训练配方：从踩坑到官方配方
+
+  #grid(columns: (1fr, 1fr), gutter: 1em)[
+    #table(
+      columns: (auto, auto, auto),
+      align: (left, left, left),
+      inset: 4pt,
+      [*项*], [*首次尝试 102*], [*最终 103*],
+      [lr], [1e-4（保守）], [*官方 5e-4 分层*],
+      [分类头], [80 类（漏配）], [*17 类*],
+      [batch], [4], [*4×累积 8=32*],
+      [增强], [无 Mosaic/MixUp], [*官方 Dense O2O*],
+      [输入归一化], [缺 Normalize], [*ImageNet mean/std*],
+    )
+    #block[
+      #text(size: 9pt)[
+        *对照实验证明配方价值*：
+        - 102（同数据，错误配方）：AP50 0.594，R\@0.25 0.706
+        - 103（官方配方）：AP50 *0.708*，R\@0.25 *0.775*
+
+        #v(0.3em)
+        *结论*：SOTA 架构只有配上官方训练配方才能兑现——直接照抄保守参数会浪费 7pp
+      ]
+    ]
+  ]
+]
+
+// ============================================================
+// 12 结果对比（v1 val）
+// ============================================================
+#slide[
+  == 结果：DEIMv2 DINOv3-L 全面领先
+
+  #grid(columns: (1fr, 1fr), gutter: 1em)[
+    #align(center)[#image("assets/v103_rat25_bar.png", width: 100%)]
+    #table(
+      columns: (auto, auto, auto),
+      align: (left, right, right),
+      inset: 4pt,
+      [*指标*], [*103*], [*096*],
+      [R\@0.25], [*0.775*], [0.757],
+      [P\@0.25], [0.460], [0.403],
+      [AP50], [*0.708*], [0.676],
+      [AP50-95], [*0.500*], [0.462],
+      [best-F1], [*0.704*（conf .47）], [—],
+      [bd 小点], [*0.614*], [0.432],
+    )
+  ]
+  #align(center)[#text(size: 9pt)[新增最好：bd 白点 0.217→0.614（三轮迭代 +39.7pp）；zmty/heidian/wy 弱纹理类全部改善]]
+]
+
+// ============================================================
+// 13 效果可视化（平衡 PR 点 conf=0.47）
+// ============================================================
+#slide[
+  == 检测效果（左 GT / 右 预测，conf=0.47 平衡点）
+
+  #grid(columns: (1fr, 1fr, 1fr), gutter: 0.5em)[
+    #image("assets/v103_jt.jpg", width: 100%)
+    #image("assets/v103_pd.jpg", width: 100%)
+    #image("assets/v103_wy.jpg", width: 100%)
+  ]
+  #align(center)[#text(size: 9pt)[jt 接头完美检出 / pd 含纸张阴影误检 / wy 小点类别混淆]]
+
+  #grid(columns: (1fr, 1fr, 1fr), gutter: 0.5em)[
+    #image("assets/v103_hei.jpg", width: 100%)
+    #image("assets/v103_zmty.jpg", width: 100%)
+    #image("assets/v103_rat25_bar.png", width: 100%)
+  ]
+  #align(center)[#text(size: 9pt)[heidian+HD 横档对齐 / zmty 密集印点合并现象——碎片化标注的合并是主要残差来源]]
+]
 // ============================================================
 // 8 结论
 // ============================================================
 #slide[
   == 结论
-
   1. 数据集核心难点：*类别不均衡 × 小目标尺度 × 类间相似*
   2. 数据处理：1280 对齐 + 增强池 + 无泄漏 8:1:1 重划
-  3. 方法：*RT-DETR-L 最优*，R\@0.25 0.757（+13.5pp vs YOLO 基线），零跨类混淆
-  4. 剩余短板：bd/hei 等极小目标（\<10px）召回仍不足——后续方向：小尺度表征 + 数据增强
+  3. 方法迭代：YOLO 0.621 → RT-DETR-L 0.757 → *DEIMv2 DINOv3-L 0.775*（R\@0.25 宏平均，+15.4pp vs 基线）
+  4. 经验：SOTA 架构必须配官方训练配方（lr 分层 / 17 类头 / 梯度累积 / Dense O2O）；短板 wy 污印与 zmty 密集印点为下一轮数据侧方向
 ]
