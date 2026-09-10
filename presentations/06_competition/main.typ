@@ -251,6 +251,13 @@
 // 12 结果对比（v1 val）
 // ============================================================
 #slide[
+  == P-R 曲线：全阈值扫描
+
+  #align(center)[#image("assets/v103_pr_curve.png", width: 96%)]
+  #align(center)[#text(size: 9pt)[同协议扫描（v1 val，IoU≥0.5，conf 0.05–0.94）：103 全曲线压制 102；best-F1 0.614→0.704，峰宽 conf 0.41–0.58（交卷阈值鲁棒）]]
+]
+
+#slide[
   == 结果：DEIMv2 DINOv3-L 全面领先
 
   #grid(columns: (1fr, 1fr), gutter: 1em)[
