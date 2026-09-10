@@ -1,0 +1,53 @@
+# V1 mixed pool (2838 train) — DEIMv2 HGNetv2-L 32.2M @1280, RTX 4090 24GB single GPU
+# Source: Kaggle v31 DEIM_L_YAML, adapted: local paths, checkpoint_freq 5
+__include__: [
+  '../dataset/custom_detection.yml',
+  '../runtime.yml',
+  '../base/dataloader.yml',
+  '../base/optimizer.yml',
+  'deimv2_hgnetv2_l_coco.yml'
+]
+
+output_dir: ./outputs/v1_mixed_L_1280_4090
+
+remap_mscoco_category: false
+
+eval_spatial_size: [1280, 1280]
+
+train_dataloader:
+  dataset:
+    img_folder: /
+    ann_file: /home/ancheng/Code/yolov8-dinov3/outputs/deim_smoke/coco/train_mixed.json
+  total_batch_size: 4
+  num_workers: 4
+  collate_fn:
+    mixup_prob: 0.0
+    copyblend_prob: 0.0
+    base_size: 1280
+    base_size_repeat: 4
+
+val_dataloader:
+  dataset:
+    img_folder: /home/ancheng/dataset/dataset_split/val/images
+    ann_file: /home/ancheng/Code/yolov8-dinov3/outputs/deim_smoke/coco/val.json
+    transforms:
+      ops:
+        - {type: Resize, size: [1280, 1280], }
+        - {type: ConvertPILImage, dtype: 'float32', scale: True}
+  total_batch_size: 4
+  num_workers: 4
+
+HGNetv2:
+  name: 'B4'
+  return_idx: [1, 2, 3]
+  freeze_at: -1
+  freeze_stem_only: True
+  freeze_norm: False
+  pretrained: True
+  local_model_dir: ./weight/hgnetv2/
+
+epoches: 72
+print_freq: 10
+checkpoint_freq: 5
+optimizer:
+  lr: 0.0001
