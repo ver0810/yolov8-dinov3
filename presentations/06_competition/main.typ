@@ -298,6 +298,14 @@
 ]
 
 #slide[
+  == R\@0.25 收官对比：全系列
+
+  #align(center)[#image("assets/r25_final_bar.png", width: 97%)]
+  #align(center)[#text(size: 9pt)[三代架构 + 消融臂同口径（v1 val，conf=0.25，IoU 0.5）：
+    103（L）0.775 为峰值 → 106（S 原图-only）0.769 → 096（RT-DETR-L）0.757 → 104/105（S）0.756 全部越过 RT-DETR 基线；基线 yolo11s 0.614]]
+]
+
+#slide[
   == 消融验证：三个单变量实验
 
   #grid(columns: (1fr, 1fr, 1fr), gutter: 0.7em)[

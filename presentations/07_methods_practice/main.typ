@@ -351,6 +351,18 @@
 ]
 
 #slide[
+  == R\@0.25 收官对比（含消融臂）
+
+  #align(center)[#image("assets/r25_final_bar.png", width: 97%)]
+  #text(size: 9pt)[
+    同口径（v1 val，conf=0.25，IoU 0.5）的全系列对比：从 yolo11s 基线 0.614 到 DEIMv2-L 0.775。
+    #v(0.2em)
+    *三个关键读数*：①103（L）= 精度上限；②106（S，原图-only）= 消融最优，反超 104（S，混合池）；
+    ③104/105（S）= 速度达标交付版（31.9 FPS），精度仍超 RT-DETR 基线。
+  ]
+]
+
+#slide[
   == 103 / 104 / 105 逐类对照
 
   #align(center)[#image("assets/deim_103_104_105_perclass.png", width: 97%)]
