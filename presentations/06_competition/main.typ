@@ -278,24 +278,34 @@
 ]
 
 #slide[
-  == 结果：DEIMv2 DINOv3-L 全面领先
+  == 结果：DEIMv2 DINOv3 系列全面领先
 
   #grid(columns: (1fr, 1fr), gutter: 1em)[
-    #align(center)[#image("assets/v103_rat25_bar.png", width: 100%)]
+    #align(center)[#image("assets/fps_accuracy_scatter.png", width: 100%)]
     #table(
-      columns: (auto, auto, auto),
-      align: (left, right, right),
+      columns: (auto, auto, auto, auto),
+      align: (left, right, right, right),
       inset: 4pt,
-      [*指标*], [*103*], [*096*],
-      [R\@0.25], [*0.775*], [0.757],
-      [P\@0.25], [0.460], [0.403],
-      [AP50], [*0.708*], [0.676],
-      [AP50-95], [*0.500*], [0.462],
-      [best-F1], [*0.704*（conf .47）], [—],
-      [bd 小点], [*0.614*], [0.432],
+      [*指标*], [*103 L*], [*104 S*], [*096*],
+      [R\@0.25], [*0.775*], [0.756], [0.757],
+      [P\@0.25], [0.460], [0.473], [0.403],
+      [AP50], [*0.708*], [0.696], [0.676],
+      [AP50-95], [*0.500*], [0.498], [0.462],
+      [FPS\@3080], [19.5 ✗], [*31.9 ✓*], [~24 ✗],
     )
   ]
-  #align(center)[#text(size: 9pt)[新增最好：bd 白点 0.217→0.614（三轮迭代 +39.7pp）；zmty/heidian/wy 弱纹理类全部改善]]
+  #align(center)[#text(size: 9pt)[*104（S 档 9.7M）实现精度与速度双达标*：R 超 RT-DETR 基线且 FPS > 30（Item4）；103（L 档）为精度上限]]
+]
+
+#slide[
+  == 消融验证：三个单变量实验
+
+  #grid(columns: (1fr, 1fr, 1fr), gutter: 0.7em)[
+    #image("assets/tb_104_vs_105.png", width: 100%)
+    #image("assets/ablation_pool_104_106.png", width: 100%)
+    #image("assets/resolution_sweep_103_105.png", width: 100%)
+  ]
+  #align(center)[#text(size: 8.5pt)[① 训练时长：132ep 官方配方零增益（68ep 已达上限） ② 数据池：blanket 增强负收益（原图-only 反超 +1.3pp） ③ 推理尺度：倒 U 顶点锁定 1280（训练尺度）]]
 ]
 
 // ============================================================
@@ -348,7 +358,8 @@
 #slide[
   == 结论
   1. 数据集核心难点：*类别不均衡 × 小目标尺度 × 类间相似*
-  2. 数据处理：1280 对齐 + 增强池 + 无泄漏 8:1:1 重划
-  3. 方法迭代：YOLO 0.621 → RT-DETR-L 0.757 → *DEIMv2 DINOv3-L 0.775*（R\@0.25 宏平均，+15.4pp vs 基线）
-  4. 经验：SOTA 架构必须配官方训练配方（lr 分层 / 17 类头 / 梯度累积 / Dense O2O）；短板 wy 污印与 zmty 密集印点为下一轮数据侧方向
+  2. 数据处理：1280 对齐 + 无泄漏 8:1:1 重划；*消融证明 blanket 增强池负收益（原图-only 反超 +1.3pp）*
+  3. 方法迭代：YOLO 0.621 → RT-DETR-L 0.757 → *DEIMv2 DINOv3-L 0.775*（+15.4pp）
+  4. 交付建议：*104（DINOv3-S，R\@0.25 0.756 + FPS 31.9）精度速度双达标*，为 Item1/Item4 的最佳平衡点；103 为精度上限（需 TensorRT 过速度线）
+  5. 经验：SOTA 架构必须配官方训练配方；训练时长与推理尺度偏差均被证伪；下一轮方向 = 弱纹理类（wy/zmty）的定向数据增强
 ]

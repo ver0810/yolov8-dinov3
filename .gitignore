@@ -74,3 +74,6 @@ presentations/**/slides.pdf
 docs/image.bmp
 # Extra weights (non-.pt formats)
 weights/
+outputs/runs/*/*.pth
+outputs/runs/*/summary/
+outputs/runs/*/eval/
