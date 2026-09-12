@@ -105,6 +105,10 @@ def parse_args():
                    help=">0 时按预测/GT 框做裁剪放大（值=相对边长的扩边比例，如 0.3）")
     p.add_argument("--out", default=None, help="输出目录（默认 outputs/inference_demo/<权重名>）")
     p.add_argument("--save-txt", action="store_true", help="同时输出 YOLO 格式预测 txt")
+    p.add_argument("--single", action="store_true",
+                   help="只输出预测图（单张，不做 GT|PRED 对比）")
+    p.add_argument("--font-scale", type=float, default=1.0,
+                   help="类名文字缩放（基准 = 图高/700，2048 原图上约 2.9；旧版为 1.46）")
     p.add_argument("--ext", choices=["jpg", "png"], default="jpg", help="输出格式（默认 jpg，演示用）")
     p.add_argument("--max-width", type=int, default=2400, help="输出最大宽度（0=不缩放）")
     return p.parse_args()
@@ -238,20 +242,51 @@ def compose(left, right, gap=10):
     return np.concatenate([left, sep, right], axis=1)
 
 
-def draw(img, dets, with_conf, thick=3):
+def draw(img, dets, with_conf, thick=3, font_scale=1.0):
     im = img.copy()
-    for x1, y1, x2, y2, s, c in dets:
+    hh, ww = im.shape[:2]
+    # 文字尺寸随图高自适应；2048² 原图上 fs≈2.9（旧版≈1.46，演示时太小）
+    fs = max(1.0, hh / 700.0) * font_scale
+    th_txt = max(2, int(round(fs * 1.6)))
+    placed = []
+
+    def collides(r):
+        return sum(max(0, min(r[2], p[2]) - max(r[0], p[0])) * max(0, min(r[3], p[3]) - max(r[1], p[1]))
+                   for p in placed)
+
+    # 大框优先占位，小框的标签让路
+    order = sorted(range(len(dets)), key=lambda i: -(float(dets[i][2]) - float(dets[i][0])) *
+                   (float(dets[i][3]) - float(dets[i][1])))
+    for i in order:
+        x1, y1, x2, y2, s, c = dets[i]
         c = int(c)
         col = COLORS[c % len(COLORS)]
-        p1, p2 = (int(round(x1)), int(round(y1))), (int(round(x2)), int(round(y2)))
-        cv2.rectangle(im, p1, p2, col, thick)
+        p1, p2 = (int(round(float(x1))), int(round(float(y1)))), (int(round(float(x2))), int(round(float(y2))))
+        cv2.rectangle(im, p1, p2, col, max(3, int(round(fs * 1.4))))
         # 注意：系统无 CJK 字体，cv2.putText 只能画 ASCII → 用拼音类名（与全项目一致）
         text = f"{CLASSES[c]}" + (f" {s:.2f}" if with_conf else "")
-        fs = max(0.8, im.shape[0] / 1400)
-        (tw, th), _ = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, fs, 2)
-        ty = p1[1] - 6 if p1[1] - th - 8 > 0 else p2[1] + th + 8
-        cv2.rectangle(im, (p1[0], ty - th - 4), (p1[0] + tw + 4, ty + 4), col, -1)
-        cv2.putText(im, text, (p1[0] + 2, ty), cv2.FONT_HERSHEY_SIMPLEX, fs, (255, 255, 255), 2)
+        (tw, th), base = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, fs, th_txt)
+        bw, bh = tw + th_txt * 2, th + th_txt + base + 2
+        lx0 = min(max(0, p1[0]), max(0, ww - bw - 2))
+        cand = [p1[1] - bh - 4,                      # 框上方
+                p2[1] + 4,                           # 框下方
+                p1[1] + 4,                           # 框内顶部
+                p1[1] - bh - 4 - (bh + 4),           # 上方再让一格
+                p2[1] + 4 + bh + 4]                  # 下方再让一格
+        best, best_cost = None, None
+        for ty in cand:
+            ty = max(bh + 2, min(ty + bh, hh - 2)) - bh     # 夹回图内（ty 为矩形上边）
+            r = (lx0, ty, lx0 + bw, ty + bh)
+            cost = collides(r) + (0 if ty == p1[1] - bh - 4 else 1)   # 同分优先"框上方"
+            if best_cost is None or cost < best_cost:
+                best, best_cost = (r, ty), cost
+            if cost == 0:
+                break
+        (lx0, ty, lx1, ty1), _ = best if isinstance(best, tuple) else (best, 0)
+        placed.append((lx0, ty, lx1, ty1))
+        cv2.rectangle(im, (lx0, ty), (lx1, ty1), col, -1)
+        cv2.putText(im, text, (lx0 + th_txt, ty + th + th_txt),
+                    cv2.FONT_HERSHEY_SIMPLEX, fs, (255, 255, 255), th_txt)
     return im
 
 
@@ -295,22 +330,25 @@ def main():
             print(f"  [跳过] 读不到 {f}")
             continue
         preds = runner(img, a.conf)
-        gts = load_gt(f, labels_dir)
+        gts = [] if a.single else load_gt(f, labels_dir)
         tot += len(preds)
-        left = put_tag(draw(img, gts, with_conf=False), "GT")
-        right = put_tag(draw(img, preds, with_conf=True), f"PRED {name}")
         h, w = img.shape[:2]
-        full = compose(left, right)
+        right = put_tag(draw(img, preds, with_conf=True, font_scale=a.font_scale), f"PRED {name}")
+        if a.single:
+            out_img = right
+        else:
+            left = put_tag(draw(img, gts, with_conf=False, font_scale=a.font_scale), "GT")
+            out_img = compose(left, right)
         save_path = out_dir / f"{Path(f).stem}.{a.ext}"
-        if a.zoom > 0 and (len(preds) or len(gts)):
-            box = np.array([list(d[:4]) for d in list(preds) + list(gts)], dtype=float)
+        boxes = [list(d[:4]) for d in list(preds) + list(gts)]
+        if a.zoom > 0 and boxes:
+            box = np.array(boxes, dtype=float)
             cx1, cy1, cx2, cy2 = box[:, 0].min(), box[:, 1].min(), box[:, 2].max(), box[:, 3].max()
             pad = a.zoom * max(cx2 - cx1, cy2 - cy1)
             x1, y1 = max(0, int(cx1 - pad)), max(0, int(cy1 - pad))
             x2, y2 = min(w, int(cx2 + pad)), min(h, int(cy2 + pad))
-            out_img = compose(left[y1:y2, x1:x2], right[y1:y2, x1:x2])
-        else:
-            out_img = full
+            out_img = out_img[y1:y2, x1:x2] if a.single else compose(
+                left[y1:y2, x1:x2], right[y1:y2, x1:x2])
         if a.max_width and out_img.shape[1] > a.max_width:
             sc = a.max_width / out_img.shape[1]
             out_img = cv2.resize(out_img, (a.max_width, int(out_img.shape[0] * sc)),
@@ -324,7 +362,8 @@ def main():
                 for x1, y1, x2, y2, s, c in preds:
                     fh.write(f"{int(c)} {((x1+x2)/2)/w:.6f} {((y1+y2)/2)/h:.6f} "
                              f"{(x2-x1)/w:.6f} {(y2-y1)/h:.6f} {s:.4f}\n")
-        print(f"  [{i}/{len(files)}] {Path(f).name}: GT {len(gts)} 框 / PRED {len(preds)} 框", flush=True)
+        info = f"PRED {len(preds)} 框" if a.single else f"GT {len(gts)} 框 / PRED {len(preds)} 框"
+        print(f"  [{i}/{len(files)}] {Path(f).name}: {info}", flush=True)
     print(f"完成：{len(files)} 张，平均 {tot/len(files):.1f} 框/图 → {out_dir}", flush=True)
 
 
