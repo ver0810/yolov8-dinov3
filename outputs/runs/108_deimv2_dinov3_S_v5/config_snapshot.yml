@@ -1,0 +1,79 @@
+# 103 DINOv3-L (DEIMv2 SOTA backbone) finetune on V1 mixed @1280 — RTX 4090 24GB
+# COCO-pretrained DEIMv2_DINOv3_L_COCO -> 17-class fabric defects, head remap
+# Following official deimv2_dinov3_l_coco.yml training params (NOT the old 102 recipe):
+#   lr 0.0005 grouped (dinov3 1.25e-5), AdamW wd 0.000125, flatcosine flat34, 68ep,
+#   Dense O2O aug policy [4,34,60], batch 32 target (grad-accum to 8 x 4 on 24GB)
+__include__: [
+  '../dataset/custom_detection.yml',
+  '../runtime.yml',
+  '../base/dataloader.yml',
+  '../base/optimizer.yml',
+  'deimv2_dinov3_s_coco.yml'
+]
+
+output_dir: ./outputs/v1_dinov3_S_v5
+
+num_classes: 17
+remap_mscoco_category: false
+
+eval_spatial_size: [1280, 1280]
+
+train_dataloader:
+  dataset:
+    img_folder: /home/ancheng/dataset/dataset_split/train/images
+    ann_file: /home/ancheng/Code/yolov8-dinov3/outputs/deim_smoke/coco/train_v5mixed.json
+    transforms:
+      ops:
+        - {type: Mosaic, output_size: 640, rotation_range: 10, translation_range: [0.1, 0.1], scaling_range: [0.5, 1.5],
+           probability: 1.0, fill_value: 0, use_cache: True, max_cached_images: 50, random_pop: True}
+        - {type: RandomPhotometricDistort, p: 0.5}
+        - {type: RandomZoomOut, fill: 0}
+        - {type: RandomIoUCrop, p: 0.8}
+        - {type: SanitizeBoundingBoxes, min_size: 1}
+        - {type: RandomHorizontalFlip}
+        - {type: Resize, size: [1280, 1280], }
+        - {type: SanitizeBoundingBoxes, min_size: 1}
+        - {type: ConvertPILImage, dtype: 'float32', scale: True}
+        - {type: Normalize, mean: [0.485, 0.456, 0.406], std: [0.229, 0.224, 0.225]}
+        - {type: ConvertBoxes, fmt: 'cxcywh', normalize: True}
+      policy:
+        epoch: [4, 34, 60]
+  total_batch_size: 8
+  num_workers: 8
+  collate_fn:
+    mixup_prob: 0.5
+    mixup_epochs: [4, 34]
+    copyblend_prob: 0.3
+    copyblend_epochs: [4, 60]
+    stop_epoch: 60
+    base_size: 1280
+    base_size_repeat: 3
+
+val_dataloader:
+  dataset:
+    img_folder: /home/ancheng/dataset/dataset_split/val/images
+    ann_file: /home/ancheng/Code/yolov8-dinov3/outputs/deim_smoke/coco/val.json
+    transforms:
+      ops:
+        - {type: Resize, size: [1280, 1280], }
+        - {type: ConvertPILImage, dtype: 'float32', scale: True}
+        - {type: Normalize, mean: [0.485, 0.456, 0.406], std: [0.229, 0.224, 0.225]}
+  total_batch_size: 8
+  num_workers: 4
+
+DINOv3STAs:
+  name: vit_tiny
+  weights_path: /home/ancheng/Code/yolov8-dinov3/third_party/DEIMv2/ckpts/vitt_distill.pth
+  interaction_indexes: [3, 7, 11]
+  num_heads: 3
+  embed_dim: 192
+  conv_inplane: 16
+  hidden_dim: 192
+
+epoches: 68
+print_freq: 10
+checkpoint_freq: 4
+grad_accum: 4
+warmup_iter: 1000
+
+# keep official grouped lr (deimv2_dinov3_l_coco.yml already defines: base 5e-4, dinov3 1.25e-5)

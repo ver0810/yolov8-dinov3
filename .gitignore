@@ -77,3 +77,6 @@ weights/
 outputs/runs/*/*.pth
 outputs/runs/*/summary/
 outputs/runs/*/eval/
+
+# 服务器凭据（勿提交）
+remote-ssh-host.txt
