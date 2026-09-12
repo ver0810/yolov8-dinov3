@@ -13,6 +13,7 @@
 """
 import argparse
 import glob as glob_mod
+import re
 import sys
 from pathlib import Path
 
@@ -44,10 +45,54 @@ COLORS = [(int(255 * r), int(255 * g), int(255 * b)) for r, g, b in
 MEAN = np.array([0.485, 0.456, 0.406], dtype=np.float32)
 STD = np.array([0.229, 0.224, 0.225], dtype=np.float32)
 
+# DEIMv2 run → 训练用的 config（--config 省略时按此自动解析）
+DEIM_CFG_DIR = ROOT / "third_party/DEIMv2/configs/deimv2"
+CONFIG_BY_RUN = {
+    "103_deimv2_dinov3_L_v1_1280": "v1_dinov3_L_1280_4090.yml",
+    "104_deimv2_dinov3_S_v1_1280": "v1_dinov3_S_1280_4090.yml",
+    "105_deimv2_dinov3_S_132ep": "v1_dinov3_S_132ep_official.yml",
+    "106_deimv2_dinov3_S_originals": "v1_dinov3_S_originals_68ep.yml",
+    "107_deimv2_dinov3_S_v4": "v1_dinov3_S_v4_68ep.yml",
+    "108_deimv2_dinov3_S_v5": "v1_dinov3_S_v5_68ep.yml",
+}
+
+
+def run_dir_of(weights):
+    wp = Path(weights)
+    return wp.parent.parent if wp.parent.name == "weights" else wp.parent
+
+
+def resolve_deim_config(weights):
+    """找 DEIMv2 config；显式 --config 优先，否则按 run 名查表。"""
+    run = run_dir_of(weights).name
+    if run in CONFIG_BY_RUN:
+        return DEIM_CFG_DIR / CONFIG_BY_RUN[run]
+    raise SystemExit(
+        f"无法自动确定 {run} 的 config，请显式传 --config。\n"
+        f"已知 run → config 映射：\n  " +
+        "\n  ".join(f"{k} → {DEIM_CFG_DIR.name}/{v}" for k, v in CONFIG_BY_RUN.items()))
+
+
+def check_config_includes(cfg_path: Path):
+    """快照文件（outputs/runs/*/config_snapshot.yml）的 __include__ 是相对 DEIMv2 目录写的，
+    换位置后会 FileNotFound——提前给出可读报错，而不是让引擎抛 traceback。"""
+    txt = cfg_path.read_text()
+    m = re.search(r"__include__:\s*\[(.*?)\]", txt, re.S)
+    if not m:
+        return
+    for inc in re.findall(r"'([^']+)'|\"([^\"]+)\"", m.group(1)):
+        rel = inc[0] or inc[1]
+        if not (cfg_path.parent / rel).resolve().exists():
+            raise SystemExit(
+                f"config 的 __include__ 解析失败：{cfg_path.parent / rel}\n"
+                f"→ 看起来是 outputs/runs/ 下的 config_snapshot.yml（相对路径只在 DEIMv2 目录内有效）。\n"
+                f"请改用 {DEIM_CFG_DIR}/ 下的原 config，或省略 --config 让脚本自动解析。")
+
 
 def parse_args():
     p = argparse.ArgumentParser(description="手动推理（DEIMv2 / ultralytics），输出 GT|PRED 并排图")
-    p.add_argument("--engine", choices=["deim", "ultralytics"], default="ultralytics")
+    p.add_argument("--engine", choices=["auto", "deim", "ultralytics"], default="auto",
+                   help="默认 auto：.pth→deim 引擎，.pt→ultralytics")
     p.add_argument("--weights", required=True, help=".pth（deim）或 .pt（ultralytics）")
     p.add_argument("--config", default=None, help="deim 必填：训练用的 DEIMv2 config yml")
     p.add_argument("--images", nargs="+", default=[str(VAL_IMAGES)],
@@ -218,22 +263,29 @@ def main():
     if not files:
         raise SystemExit("没有可处理的图片")
 
-    if a.engine == "deim":
-        if not a.config:
-            raise SystemExit("--engine deim 需要 --config（训练用的 DEIMv2 config yml）")
-        runner = DeimRunner(a.config, a.weights, a.imgsz)
+    wp = Path(a.weights)
+    engine = a.engine
+    if engine == "auto":
+        engine = "deim" if wp.suffix == ".pth" else "ultralytics"
+    if engine == "deim":
+        cfg = Path(a.config) if a.config else resolve_deim_config(a.weights)
+        if not cfg.is_absolute():
+            cfg = ROOT / cfg
+        check_config_includes(cfg)
+        runner = DeimRunner(cfg, a.weights, a.imgsz)
     else:
+        if wp.suffix == ".pth":
+            raise SystemExit(f"{wp.name} 是 DEIMv2 权重（.pth），请用 --engine deim 或让它自动判定")
         runner = UltralyticsRunner(a.weights, a.imgsz)
 
-    wp = Path(a.weights)
-    run_dir = wp.parent.parent if wp.parent.name == "weights" else wp.parent
+    run_dir = run_dir_of(a.weights)
     name = f"{run_dir.name}_{wp.stem}"
     out_dir = Path(a.out) if a.out else ROOT / "outputs/inference_demo" / name
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "classes.txt").write_text(
         "\n".join(f"{i}\t{c}\t{CN[c]}" for i, c in enumerate(CLASSES)) + "\n")
     labels_dir = Path(a.labels) if a.labels else (files[0].parent.parent / "labels")
-    print(f"引擎={a.engine} 权重={a.weights} 分辨率={getattr(runner, 'imgsz', '?')} "
+    print(f"引擎={engine} 权重={a.weights} 分辨率={getattr(runner, 'imgsz', '?')} "
           f"conf={a.conf} 图片={len(files)} 输出={out_dir}", flush=True)
 
     tot = 0
