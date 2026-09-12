@@ -1,0 +1,66 @@
+{
+ "hardware": "RTX 3060 Laptop 6GB (实测机) — 全部数字为本机实测, 无折算",
+ "val": "v1 val 181 图, fp16",
+ "batch4_throughput": {
+  "yolo11s 019@1024": {
+   "inf_ms": 11.89,
+   "inf_fps": 84.1,
+   "e2e_fps": 61.7
+  },
+  "yolo11s 019@1280": {
+   "inf_ms": 17.22,
+   "inf_fps": 58.1,
+   "e2e_fps": 44.7
+  },
+  "RT-DETR-L 096@1024": {
+   "inf_ms": 36.51,
+   "inf_fps": 27.4,
+   "e2e_fps": 25.5
+  },
+  "RT-DETR-L 096@1280": {
+   "inf_ms": 50.43,
+   "inf_fps": 19.8,
+   "e2e_fps": 18.7
+  },
+  "DEIMv2-S 104@1024": {
+   "inf_ms": 31.1,
+   "inf_fps": 32.1,
+   "e2e_fps": 17.0
+  },
+  "DEIMv2-S 104@1280": {
+   "inf_ms": 49.4,
+   "inf_fps": 20.2,
+   "e2e_fps": 14.2
+  },
+  "DEIMv2-L 103@1024": {
+   "inf_ms": 57.4,
+   "inf_fps": 17.4,
+   "e2e_fps": 13.5
+  },
+  "DEIMv2-L 103@1280": {
+   "inf_ms": 98.4,
+   "inf_fps": 10.1,
+   "e2e_fps": 8.3
+  }
+ },
+ "batch1_latency_model_only_fps": {
+  "yolo11s 019@1024": 26.1,
+  "yolo11s 019@1280": 22.6,
+  "RT-DETR-L 096@1024": 12.6,
+  "RT-DETR-L 096@1280": 12.3,
+  "DEIMv2-S 104@1024": 11.9,
+  "DEIMv2-S 104@1280": 11.1,
+  "DEIMv2-L 103@1024": 10.4,
+  "DEIMv2-L 103@1280": 8.2
+ },
+ "batch4_over_batch1": {
+  "yolo11s 019@1024": 3.22,
+  "yolo11s 019@1280": 2.57,
+  "RT-DETR-L 096@1024": 2.17,
+  "RT-DETR-L 096@1280": 1.61,
+  "DEIMv2-S 104@1024": 2.7,
+  "DEIMv2-S 104@1280": 1.82,
+  "DEIMv2-L 103@1024": 1.67,
+  "DEIMv2-L 103@1280": 1.23
+ }
+}

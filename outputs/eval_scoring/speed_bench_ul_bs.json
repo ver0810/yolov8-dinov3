@@ -1,0 +1,38 @@
+{
+ "019_1024_bs4": {
+  "preprocess_ms": 2.28,
+  "inference_ms": 11.89,
+  "postprocess_ms": 2.04,
+  "e2e_ms_per_img": 16.21,
+  "inf_fps": 84.1,
+  "e2e_fps": 61.7,
+  "macro_R": 0.5745
+ },
+ "019_1280_bs4": {
+  "preprocess_ms": 3.12,
+  "inference_ms": 17.22,
+  "postprocess_ms": 2.03,
+  "e2e_ms_per_img": 22.36,
+  "inf_fps": 58.1,
+  "e2e_fps": 44.7,
+  "macro_R": 0.5362
+ },
+ "096_1024_bs4": {
+  "preprocess_ms": 2.22,
+  "inference_ms": 36.51,
+  "postprocess_ms": 0.46,
+  "e2e_ms_per_img": 39.19,
+  "inf_fps": 27.4,
+  "e2e_fps": 25.5,
+  "macro_R": 0.6544
+ },
+ "096_1280_bs4": {
+  "preprocess_ms": 2.59,
+  "inference_ms": 50.43,
+  "postprocess_ms": 0.44,
+  "e2e_ms_per_img": 53.46,
+  "inf_fps": 19.8,
+  "e2e_fps": 18.7,
+  "macro_R": 0.6624
+ }
+}

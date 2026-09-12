@@ -1,0 +1,90 @@
+{
+ "104_S_1024_bs4": {
+  "passes": [
+   {
+    "total_s": 11.87,
+    "inf_s": 7.48,
+    "post_s": 0.07
+   },
+   {
+    "total_s": 10.68,
+    "inf_s": 5.8,
+    "post_s": 0.04
+   },
+   {
+    "total_s": 10.65,
+    "inf_s": 5.63,
+    "post_s": 0.04
+   }
+  ],
+  "inf_ms_per_img": 34.8,
+  "e2e_fps": 16.4,
+  "inf_fps": 29.2
+ },
+ "104_S_1280_bs4": {
+  "passes": [
+   {
+    "total_s": 12.87,
+    "inf_s": 9.04,
+    "post_s": 0.05
+   },
+   {
+    "total_s": 12.75,
+    "inf_s": 8.87,
+    "post_s": 0.05
+   },
+   {
+    "total_s": 12.7,
+    "inf_s": 8.94,
+    "post_s": 0.05
+   }
+  ],
+  "inf_ms_per_img": 49.4,
+  "e2e_fps": 14.2,
+  "inf_fps": 20.2
+ },
+ "103_L_1024_bs4": {
+  "passes": [
+   {
+    "total_s": 14.47,
+    "inf_s": 11.42,
+    "post_s": 0.07
+   },
+   {
+    "total_s": 13.37,
+    "inf_s": 10.38,
+    "post_s": 0.06
+   },
+   {
+    "total_s": 13.4,
+    "inf_s": 10.41,
+    "post_s": 0.06
+   }
+  ],
+  "inf_ms_per_img": 59.3,
+  "e2e_fps": 13.2,
+  "inf_fps": 16.9
+ },
+ "103_L_1280_bs4": {
+  "passes": [
+   {
+    "total_s": 21.96,
+    "inf_s": 18.24,
+    "post_s": 0.06
+   },
+   {
+    "total_s": 21.77,
+    "inf_s": 17.84,
+    "post_s": 0.07
+   },
+   {
+    "total_s": 21.72,
+    "inf_s": 17.8,
+    "post_s": 0.06
+   }
+  ],
+  "inf_ms_per_img": 99.2,
+  "e2e_fps": 8.3,
+  "inf_fps": 10.1
+ }
+}
