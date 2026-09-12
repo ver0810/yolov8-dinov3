@@ -1,0 +1,142 @@
+{
+ "103_L_1280_fp16_opt": {
+  "passes": [
+   {
+    "total_s": 43.25,
+    "pre_s": 21.07,
+    "fwd_s": 22.05,
+    "post_s": 0.13
+   },
+   {
+    "total_s": 42.78,
+    "pre_s": 20.85,
+    "fwd_s": 21.81,
+    "post_s": 0.13
+   },
+   {
+    "total_s": 43.11,
+    "pre_s": 20.87,
+    "fwd_s": 22.11,
+    "post_s": 0.13
+   }
+  ],
+  "n": 181,
+  "e2e_fps": [
+   4.2,
+   4.2,
+   4.2
+  ],
+  "model_only_fps": [
+   8.2,
+   8.2,
+   8.1
+  ],
+  "avg_e2e_fps": 4.2,
+  "avg_model_only_fps": 8.2
+ },
+ "104_S_1280_fp16_opt": {
+  "passes": [
+   {
+    "total_s": 37.79,
+    "pre_s": 21.06,
+    "fwd_s": 16.59,
+    "post_s": 0.14
+   },
+   {
+    "total_s": 36.98,
+    "pre_s": 21.01,
+    "fwd_s": 15.84,
+    "post_s": 0.13
+   },
+   {
+    "total_s": 37.39,
+    "pre_s": 20.94,
+    "fwd_s": 16.31,
+    "post_s": 0.13
+   }
+  ],
+  "n": 181,
+  "e2e_fps": [
+   4.8,
+   4.9,
+   4.8
+  ],
+  "model_only_fps": [
+   10.8,
+   11.3,
+   11.0
+  ],
+  "avg_e2e_fps": 4.8,
+  "avg_model_only_fps": 11.1
+ },
+ "103_L_1024_fp16": {
+  "passes": [
+   {
+    "total_s": 39.03,
+    "pre_s": 21.38,
+    "fwd_s": 17.51,
+    "post_s": 0.14
+   },
+   {
+    "total_s": 38.37,
+    "pre_s": 20.78,
+    "fwd_s": 17.45,
+    "post_s": 0.14
+   },
+   {
+    "total_s": 37.86,
+    "pre_s": 20.68,
+    "fwd_s": 17.04,
+    "post_s": 0.13
+   }
+  ],
+  "n": 181,
+  "e2e_fps": [
+   4.6,
+   4.7,
+   4.8
+  ],
+  "model_only_fps": [
+   10.3,
+   10.3,
+   10.5
+  ],
+  "avg_e2e_fps": 4.7,
+  "avg_model_only_fps": 10.4
+ },
+ "104_S_1024_fp16": {
+  "passes": [
+   {
+    "total_s": 36.63,
+    "pre_s": 20.76,
+    "fwd_s": 15.74,
+    "post_s": 0.14
+   },
+   {
+    "total_s": 35.88,
+    "pre_s": 20.76,
+    "fwd_s": 14.98,
+    "post_s": 0.14
+   },
+   {
+    "total_s": 35.84,
+    "pre_s": 20.78,
+    "fwd_s": 14.92,
+    "post_s": 0.13
+   }
+  ],
+  "n": 181,
+  "e2e_fps": [
+   4.9,
+   5.0,
+   5.1
+  ],
+  "model_only_fps": [
+   11.4,
+   12.0,
+   12.0
+  ],
+  "avg_e2e_fps": 5.0,
+  "avg_model_only_fps": 11.8
+ }
+}

@@ -1,0 +1,82 @@
+{
+ "yolo11s_019": {
+  "passes_s": [
+   29.79,
+   30.15,
+   29.77
+  ],
+  "e2e_fps": [
+   6.1,
+   6.0,
+   6.1
+  ],
+  "avg_e2e_fps": 6.1,
+  "model_only_fps": [
+   22.9,
+   21.9,
+   22.9
+  ],
+  "avg_model_only_fps": 22.6,
+  "fps_3080_est": 56.5
+ },
+ "RT-DETR-L_096": {
+  "passes_s": [
+   36.45,
+   36.63,
+   36.27
+  ],
+  "e2e_fps": [
+   5.0,
+   4.9,
+   5.0
+  ],
+  "avg_e2e_fps": 5.0,
+  "model_only_fps": [
+   12.3,
+   12.1,
+   12.4
+  ],
+  "avg_model_only_fps": 12.3,
+  "fps_3080_est": 30.8
+ },
+ "DEIMv2-S_104": {
+  "passes_s": [
+   37.79,
+   36.98,
+   37.39
+  ],
+  "e2e_fps": [
+   4.8,
+   4.9,
+   4.8
+  ],
+  "avg_e2e_fps": 4.8,
+  "model_only_fps": [
+   10.8,
+   11.3,
+   11.0
+  ],
+  "avg_model_only_fps": 11.1,
+  "fps_3080_est": 27.8
+ },
+ "DEIMv2-L_103": {
+  "passes_s": [
+   43.25,
+   42.78,
+   43.11
+  ],
+  "e2e_fps": [
+   4.2,
+   4.2,
+   4.2
+  ],
+  "avg_e2e_fps": 4.2,
+  "model_only_fps": [
+   8.2,
+   8.2,
+   8.1
+  ],
+  "avg_model_only_fps": 8.2,
+  "fps_3080_est": 20.5
+ }
+}
